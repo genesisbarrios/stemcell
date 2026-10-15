@@ -1,0 +1,186 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void: #0b0b0a;
+  --color-panel: #121210;
+  --color-panel2: #171715;
+  --color-bone: #f0ede3;
+  --color-dim: #83837a;
+  --color-line: #26261f;
+  --color-acid: #d4ff2f;
+  --color-acid-dim: #9dbf1e;
+  --font-display: var(--font-archivo), sans-serif;
+  --font-mono: var(--font-jbmono), monospace;
+}
+
+html,
+body {
+  background: var(--color-void);
+  color: var(--color-bone);
+  font-family: var(--font-mono);
+  overscroll-behavior: none;
+}
+
+::selection {
+  background: var(--color-acid);
+  color: #0b0b0a;
+}
+
+/* thin scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #33332c transparent;
+}
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #33332c;
+}
+
+/* ---- instrument range slider ---- */
+input[type="range"].sc-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  background: transparent;
+  cursor: ew-resize;
+}
+input[type="range"].sc-slider::-webkit-slider-runnable-track {
+  height: 2px;
+  background: #33332c;
+}
+input[type="range"].sc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 8px;
+  height: 14px;
+  margin-top: -6px;
+  background: var(--color-bone);
+  border: none;
+}
+input[type="range"].sc-slider:active::-webkit-slider-thumb,
+input[type="range"].sc-slider:focus-visible::-webkit-slider-thumb {
+  background: var(--color-acid);
+}
+input[type="range"].sc-slider::-moz-range-track {
+  height: 2px;
+  background: #33332c;
+}
+input[type="range"].sc-slider::-moz-range-thumb {
+  width: 8px;
+  height: 14px;
+  background: var(--color-bone);
+  border: none;
+  border-radius: 0;
+}
+input[type="range"].sc-slider:active::-moz-range-thumb {
+  background: var(--color-acid);
+}
+
+/* vertical fader for mix-style controls */
+input[type="range"].sc-fader {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 18px;
+  height: 100%;
+}
+
+/* piano keys */
+.sc-key-white {
+  background: #e8e4d8;
+  border: 1px solid #0b0b0a;
+}
+.sc-key-white.sc-active {
+  background: var(--color-acid);
+}
+.sc-key-black {
+  background: #1a1a17;
+  border: 1px solid #000;
+}
+.sc-key-black.sc-active {
+  background: var(--color-acid-dim);
+}
+
+.sc-label {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--color-dim);
+  text-transform: uppercase;
+}
+
+.sc-readout {
+  font-size: 10px;
+  color: var(--color-acid);
+  font-variant-numeric: tabular-nums;
+}
+
+.sc-panel {
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+}
+
+.sc-btn {
+  border: 1px solid var(--color-line);
+  color: var(--color-bone);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  transition: all 120ms;
+  background: transparent;
+}
+.sc-btn:hover {
+  border-color: var(--color-acid);
+  color: var(--color-acid);
+}
+.sc-btn:disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+.sc-btn-acid {
+  background: var(--color-acid);
+  color: #0b0b0a;
+  border-color: var(--color-acid);
+}
+.sc-btn-acid:hover {
+  background: #e2ff5e;
+  color: #0b0b0a;
+}
+.sc-btn-danger {
+  border-color: #5c2a2a;
+  color: #e06c5c;
+}
+.sc-btn-danger:hover {
+  border-color: #e06c5c;
+  color: #ff8a76;
+}
+
+@keyframes sc-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.15;
+  }
+}
+.sc-blink {
+  animation: sc-blink 1s steps(2) infinite;
+}
+
+@keyframes sc-scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-blink {
+    animation: none;
+  }
+}
