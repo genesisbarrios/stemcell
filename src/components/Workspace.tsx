@@ -194,7 +194,7 @@ export default function Workspace({
 
   return (
     <div
-      className="relative flex min-h-screen flex-col bg-void"
+      className="relative flex h-screen flex-col overflow-hidden bg-void"
       onDragOver={(e) => {
         e.preventDefault();
         setDragOver(true);
@@ -215,7 +215,7 @@ export default function Workspace({
         </div>
       )}
       {/* header */}
-      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-3">
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-2">
         <div className="flex items-center gap-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -257,10 +257,10 @@ export default function Workspace({
       </header>
 
       {/* main */}
-      <main className="grid flex-1 grid-cols-1 gap-px bg-line lg:grid-cols-12">
+      <main className="grid min-h-0 flex-1 grid-cols-1 gap-px overflow-y-auto bg-line lg:grid-cols-2 lg:overflow-visible">
         {/* left: waveform + granular */}
-        <section className="sc-panel flex flex-col lg:col-span-7">
-          <div className="flex items-center justify-between border-b border-line px-4 py-2">
+        <section className="sc-panel flex min-h-0 flex-col">
+          <div className="flex h-9 items-center justify-between border-b border-line px-4">
             <span className="sc-label">
               source / drag to select region · click to set position
             </span>
@@ -268,7 +268,7 @@ export default function Workspace({
               {lastNote !== null ? `note ${lastNote}` : ""}
             </span>
           </div>
-          <div className="relative h-40 border-b border-line sm:h-48">
+          <div className="relative h-36 border-b border-line sm:h-44">
             <WaveformEditor
               buffer={buffer}
               regionStart={granular.regionStart}
@@ -372,30 +372,30 @@ export default function Workspace({
               }}
             />
           </div>
-          <div className="border-b border-line px-4 py-2">
+          <div className="flex h-9 items-center border-b border-line px-4">
             <span className="sc-label">granular engine</span>
           </div>
-          <div className="flex-1 p-4">
+          <div className="min-h-0 flex-1 overflow-y-auto p-3">
             <GranularControls params={granular} onChange={onGranular} />
           </div>
         </section>
 
         {/* right: visualizer + fx + presets */}
-        <section className="grid grid-rows-[auto_1fr_auto] lg:col-span-5">
-          <div className="sc-panel border-b border-line">
-            <div className="border-b border-line px-4 py-2">
+        <section className="flex min-h-0 flex-col">
+          <div className="sc-panel flex min-h-0 flex-1 flex-col border-b border-line">
+            <div className="flex h-9 items-center border-b border-line px-4">
               <span className="sc-label">organism</span>
             </div>
-            <div className="h-44 sm:h-52">
+            <div className="min-h-0 flex-1">
               <Visualizer />
             </div>
           </div>
-          <div className="sc-panel border-b border-line p-4">
-            <div className="sc-label mb-4">effects</div>
+          <div className="sc-panel border-b border-line p-3">
+            <div className="sc-label mb-2">effects</div>
             <EffectsPanel fx={fx} onChange={onFx} />
           </div>
-          <div className="sc-panel p-4">
-            <div className="sc-label mb-3">mutations</div>
+          <div className="sc-panel p-3">
+            <div className="sc-label mb-2">mutations</div>
             <PresetBar granular={granular} fx={fx} apply={applyPreset} />
           </div>
         </section>
@@ -403,7 +403,7 @@ export default function Workspace({
 
       {/* keyboard */}
       <footer className="border-t border-line">
-        <div className="flex items-center justify-between px-4 py-2">
+        <div className="flex items-center justify-between px-4 py-1.5">
           <div className="flex items-center gap-3">
             <span className="sc-label">octave</span>
             <button
@@ -431,7 +431,7 @@ export default function Workspace({
             keys a–; play · z/x octave · space preview · m mono/poly
           </div>
         </div>
-        <div className="h-28 sm:h-32">
+        <div className="h-24 sm:h-28">
           <Keyboard
             octave={baseMidi}
             active={active}

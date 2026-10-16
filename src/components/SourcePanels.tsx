@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { engine } from "@/audio/engine";
 import { LIBRARY, LibrarySound } from "@/audio/samples";
 import { DEFAULT_OSC, OscParams, SourceInfo } from "@/audio/types";
+import Knob from "./Knob";
 
 /* ---------------- microphone ---------------- */
 
@@ -206,34 +207,28 @@ export function OscPanel({ onReady }: { onReady: (i: SourceInfo) => void }) {
           </button>
         ))}
       </div>
-      {(
-        [
-          ["freq", 20, 800, "hz", 1],
-          ["detune", -100, 100, "ct", 1],
-          ["gain", 0, 1, "", 0.01],
-          ["lfoRate", 0, 12, "hz", 0.1],
-          ["lfoDepth", 0, 100, "ct", 1],
-        ] as const
-      ).map(([k, min, max, unit, step]) => (
-        <div key={k} className="flex items-center gap-3">
-          <div className="sc-label w-16">
-            {k === "lfoRate" ? "LFO rate" : k === "lfoDepth" ? "LFO amt" : k}
-          </div>
-          <input
-            className="sc-slider flex-1"
-            type="range"
+      <div className="flex flex-wrap gap-x-2 gap-y-1">
+        {(
+          [
+            ["freq", 20, 800, "hz", 1],
+            ["detune", -100, 100, "ct", 1],
+            ["gain", 0, 1, "", 0.01],
+            ["lfoRate", 0, 12, "hz", 0.1],
+            ["lfoDepth", 0, 100, "ct", 1],
+          ] as const
+        ).map(([k, min, max, unit, step]) => (
+          <Knob
+            key={k}
+            label={k === "lfoRate" ? "lfo rate" : k === "lfoDepth" ? "lfo amt" : k}
+            value={p[k]}
             min={min}
             max={max}
             step={step}
-            value={p[k]}
-            onChange={(e) => set(k, +e.target.value)}
+            unit={unit}
+            onChange={(v) => set(k, v)}
           />
-          <div className="sc-readout w-14 text-right">
-            {p[k].toFixed(step < 1 ? (step < 0.1 ? 2 : 1) : 0)}
-            {unit}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
       <div className="flex items-center justify-between">
         <div className="flex gap-1">
           {(["granular", "direct"] as const).map((m) => (

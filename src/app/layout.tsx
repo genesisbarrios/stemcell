@@ -21,7 +21,7 @@ export default function RootLayout({
         crossOrigin="anonymous"
       />
       <link
-        href="https://fonts.googleapis.com/css2?family=Michroma&family=Oi&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Climate+Crisis:YEAR@1979&family=Michroma&family=Oi&display=swap"
         rel="stylesheet"
       />
       <body className="antialiased">{children}</body>

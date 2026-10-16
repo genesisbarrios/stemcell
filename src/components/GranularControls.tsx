@@ -1,7 +1,7 @@
 "use client";
 
 import { GranularParams } from "@/audio/types";
-import ParamSlider from "./ParamSlider";
+import Knob from "./Knob";
 
 export default function GranularControls({
   params,
@@ -11,15 +11,15 @@ export default function GranularControls({
   onChange: <K extends keyof GranularParams>(k: K, v: number) => void;
 }) {
   return (
-    <div className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3">
-      <ParamSlider
+    <div className="grid grid-cols-3 gap-x-2 gap-y-3 sm:grid-cols-5">
+      <Knob
         label="position"
         value={params.position}
         min={0}
         max={1}
         onChange={(v) => onChange("position", v)}
       />
-      <ParamSlider
+      <Knob
         label="grain size"
         value={params.grainSize}
         min={8}
@@ -28,7 +28,7 @@ export default function GranularControls({
         unit="ms"
         onChange={(v) => onChange("grainSize", v)}
       />
-      <ParamSlider
+      <Knob
         label="density"
         value={params.density}
         min={1}
@@ -37,14 +37,14 @@ export default function GranularControls({
         unit="/s"
         onChange={(v) => onChange("density", v)}
       />
-      <ParamSlider
+      <Knob
         label="spray"
         value={params.spray}
         min={0}
         max={1}
         onChange={(v) => onChange("spray", v)}
       />
-      <ParamSlider
+      <Knob
         label="speed"
         value={params.speed}
         min={-2}
@@ -52,7 +52,7 @@ export default function GranularControls({
         format={(v) => (v > 0 ? `+${v.toFixed(2)}` : v.toFixed(2))}
         onChange={(v) => onChange("speed", v)}
       />
-      <ParamSlider
+      <Knob
         label="pitch"
         value={params.transpose}
         min={-24}
@@ -62,7 +62,7 @@ export default function GranularControls({
         format={(v) => (v > 0 ? `+${v.toFixed(1)}` : v.toFixed(1))}
         onChange={(v) => onChange("transpose", v)}
       />
-      <ParamSlider
+      <Knob
         label="pitch spray"
         value={params.pitchJitter}
         min={0}
@@ -71,21 +71,21 @@ export default function GranularControls({
         unit="st"
         onChange={(v) => onChange("pitchJitter", v)}
       />
-      <ParamSlider
+      <Knob
         label="texture"
         value={params.texture}
         min={0}
         max={1}
         onChange={(v) => onChange("texture", v)}
       />
-      <ParamSlider
+      <Knob
         label="stereo"
         value={params.spread}
         min={0}
         max={1}
         onChange={(v) => onChange("spread", v)}
       />
-      <ParamSlider
+      <Knob
         label="mix"
         value={params.mix}
         min={0}
