@@ -49,6 +49,7 @@ export default function Workspace({
   const [poly, setPoly] = useState(true);
   const [dragOver, setDragOver] = useState(false);
   const [panel, setPanel] = useState<Panel>(null);
+  const [mutOpen, setMutOpen] = useState(false);
   const [panelError, setPanelError] = useState("");
   const [importing, setImporting] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -417,8 +418,17 @@ export default function Workspace({
             <EffectsPanel fx={fx} onChange={onFx} />
           </div>
           <div className="sc-panel p-2 sm:p-3">
-            <div className="sc-label mb-2">mutations</div>
-            <PresetBar granular={granular} fx={fx} apply={applyPreset} />
+            <button
+              className={`sc-label flex w-full items-center justify-between lg:pointer-events-none ${mutOpen ? "mb-2" : ""} lg:mb-2`}
+              onClick={() => setMutOpen((o) => !o)}
+              aria-expanded={mutOpen}
+            >
+              <span>mutations</span>
+              <span className="lg:hidden">{mutOpen ? "−" : "+"}</span>
+            </button>
+            <div className={`${mutOpen ? "block" : "hidden"} lg:block`}>
+              <PresetBar granular={granular} fx={fx} apply={applyPreset} />
+            </div>
           </div>
         </section>
       </main>
