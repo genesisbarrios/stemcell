@@ -11,8 +11,7 @@ import {
   OscParams,
   SourceInfo,
 } from "@/audio/types";
-import Landing, { SourceChoice } from "./Landing";
-import SourceModal, { ModalTab } from "./SourceModal";
+import Landing from "./Landing";
 import Workspace from "./Workspace";
 
 export default function StemcellApp() {
@@ -24,11 +23,10 @@ export default function StemcellApp() {
   });
   const [fx, setFx] = useState<FxParams>({ ...DEFAULT_FX });
   const [osc, setOsc] = useState<OscParams | null>(null);
-  const [modal, setModal] = useState<ModalTab | null>(null);
 
-  const choose = useCallback(async (c: SourceChoice) => {
+  const start = useCallback(async () => {
     await engine.init();
-    setModal(c);
+    setView("workspace");
   }, []);
 
   const onGranular = useCallback(
@@ -44,61 +42,44 @@ export default function StemcellApp() {
     engine.setFx(k, v);
   }, []);
 
-  const ready = useCallback(
-    (info: SourceInfo) => {
-      engine.resume();
-      engine.pushParams();
-      if (info.kind !== "osc") engine.osc = null;
-      setSource(info);
-      setBuffer(engine.source);
-      setOsc(engine.osc ? { ...engine.osc } : null);
-      setModal(null);
-      setView("workspace");
-    },
-    []
-  );
+  const ready = useCallback((info: SourceInfo) => {
+    engine.resume();
+    engine.pushParams();
+    if (info.kind !== "osc") engine.osc = null;
+    setSource(info);
+    setBuffer(engine.source);
+    setOsc(engine.osc ? { ...engine.osc } : null);
+  }, []);
 
   return (
-    <>
-      <AnimatePresence mode="wait">
-        {view === "landing" ? (
-          <motion.div
-            key="landing"
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.35 }}
-          >
-            <Landing onChoose={choose} />
-          </motion.div>
-        ) : (
-          source && (
-            <motion.div
-              key="workspace"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              <Workspace
-                source={source}
-                buffer={buffer}
-                granular={granular}
-                fx={fx}
-                osc={osc}
-                onGranular={onGranular}
-                onFx={onFx}
-                onReplace={() => setModal("file")}
-                onSourceLoaded={ready}
-              />
-            </motion.div>
-          )
-        )}
-      </AnimatePresence>
-      {modal && (
-        <SourceModal
-          initialTab={modal}
-          onReady={ready}
-          onClose={() => setModal(null)}
-        />
+    <AnimatePresence mode="wait">
+      {view === "landing" ? (
+        <motion.div
+          key="landing"
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 0.35 }}
+        >
+          <Landing onStart={start} />
+        </motion.div>
+      ) : (
+        <motion.div
+          key="workspace"
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <Workspace
+            source={source}
+            buffer={buffer}
+            granular={granular}
+            fx={fx}
+            osc={osc}
+            onGranular={onGranular}
+            onFx={onFx}
+            onSourceLoaded={ready}
+          />
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>
   );
 }

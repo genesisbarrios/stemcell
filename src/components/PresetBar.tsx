@@ -64,7 +64,7 @@ export default function PresetBar({
           <button
             key={p.name}
             onClick={() => load(p)}
-            className={`border px-2 py-1.5 text-[9px] uppercase tracking-wider transition-colors ${
+            className={`border px-2 py-1.5 font-sub text-[9px] uppercase tracking-wider transition-colors ${
               active === p.name
                 ? "border-acid text-acid"
                 : "border-line text-dim hover:border-dim hover:text-bone"
@@ -77,7 +77,7 @@ export default function PresetBar({
           <button
             key={p.name}
             onClick={() => load(p)}
-            className={`border px-2 py-1.5 text-[9px] uppercase tracking-wider ${
+            className={`border px-2 py-1.5 font-sub text-[9px] uppercase tracking-wider ${
               active === p.name
                 ? "border-acid text-acid"
                 : "border-dim/50 text-dim hover:text-bone"

@@ -17,9 +17,9 @@ Requires Node 20+.
 
 ## The loop
 
-1. Pick a source — import audio (WAV/MP3/OGG), record through the mic,
-   generate an oscillator tone, or discover a procedurally generated field
-   sound from the built-in library.
+1. Press START CREATING, then load a source from the waveform area — record
+   through the mic, import/drop audio (WAV/MP3/OGG), browse the procedurally
+   generated library, or generate an oscillator tone.
 2. Drag on the waveform to select a region, click to set grain position.
 3. Play the keyboard (on-screen, `a`–`;` keys, `z`/`x` octave, `m` mono/poly,
    or a MIDI controller).

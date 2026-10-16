@@ -37,7 +37,7 @@ export default function ParticleCanvas({
     let raf = 0;
     const cells: Cell[] = [];
     const freq = new Uint8Array(256);
-    const ACID = "212,255,47";
+    const ACID = "63,216,240";
     const BONE = "240,237,227";
 
     const resize = () => {

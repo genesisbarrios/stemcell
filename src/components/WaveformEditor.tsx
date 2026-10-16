@@ -93,7 +93,7 @@ export default function WaveformEditor({
         ctx.fillRect(0, 0, rs * w, h);
         ctx.fillRect(re * w, 0, w - re * w, h);
         // region borders
-        ctx.strokeStyle = "#d4ff2f";
+        ctx.strokeStyle = "#3fd8f0";
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(rs * w, 0);
@@ -101,19 +101,19 @@ export default function WaveformEditor({
         ctx.moveTo(re * w, 0);
         ctx.lineTo(re * w, h);
         ctx.stroke();
-        ctx.fillStyle = "rgba(212,255,47,0.08)";
+        ctx.fillStyle = "rgba(63,216,240,0.08)";
         ctx.fillRect(rs * w, 0, (re - rs) * w, h);
 
         // grain markers
         const gf = grainFrame.current;
         if (gf) {
-          ctx.fillStyle = "rgba(212,255,47,0.85)";
+          ctx.fillStyle = "rgba(63,216,240,0.85)";
           for (let i = 0; i < gf.positions.length; i++) {
             const x = gf.positions[i] * w;
             ctx.fillRect(x, mid - 3 - ((i * 7) % 9), 1.5, 3);
           }
           // scan cursors
-          ctx.strokeStyle = "rgba(212,255,47,0.9)";
+          ctx.strokeStyle = "rgba(63,216,240,0.9)";
           for (let i = 0; i < gf.scans.length; i++) {
             const s = gf.scans[i];
             if (s < 0) continue;

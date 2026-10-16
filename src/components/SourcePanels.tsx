@@ -5,126 +5,9 @@ import { engine } from "@/audio/engine";
 import { LIBRARY, LibrarySound } from "@/audio/samples";
 import { DEFAULT_OSC, OscParams, SourceInfo } from "@/audio/types";
 
-export type ModalTab = "file" | "mic" | "osc" | "library";
-
-export default function SourceModal({
-  initialTab,
-  onReady,
-  onClose,
-}: {
-  initialTab: ModalTab;
-  onReady: (info: SourceInfo) => void;
-  onClose: () => void;
-}) {
-  const [tab, setTab] = useState<ModalTab>(initialTab);
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const importFile = async (f: File) => {
-    setError("");
-    setLoading(true);
-    try {
-      const info = await engine.loadFile(f);
-      onReady(info);
-    } catch {
-      setError("couldn't decode that file — try WAV, MP3 or OGG");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (initialTab === "file") fileRef.current?.click();
-  }, [initialTab]);
-
-  const tabs: { id: ModalTab; label: string }[] = [
-    { id: "file", label: "IMPORT" },
-    { id: "mic", label: "RECORD" },
-    { id: "osc", label: "GENERATE" },
-    { id: "library", label: "DISCOVER" },
-  ];
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-      <div className="sc-panel w-full max-w-lg">
-        <div className="flex items-center justify-between border-b border-line">
-          <div className="flex">
-            {tabs.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setTab(t.id)}
-                className={`px-4 py-3 text-[10px] tracking-[0.15em] ${
-                  tab === t.id
-                    ? "bg-panel2 text-acid"
-                    : "text-dim hover:text-bone"
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-          <button
-            onClick={onClose}
-            className="px-4 py-3 text-dim hover:text-bone"
-            aria-label="close"
-          >
-            ✕
-          </button>
-        </div>
-
-        <div className="p-6">
-          {tab === "file" && (
-            <div
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => {
-                e.preventDefault();
-                const f = e.dataTransfer.files?.[0];
-                if (f) importFile(f);
-              }}
-              className="flex h-48 flex-col items-center justify-center border border-dashed border-line text-center"
-            >
-              <div className="sc-label mb-3">drop audio here</div>
-              <button
-                className="sc-btn"
-                onClick={() => fileRef.current?.click()}
-              >
-                or browse files
-              </button>
-              <input
-                ref={fileRef}
-                type="file"
-                accept="audio/*"
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) importFile(f);
-                }}
-              />
-              {loading && (
-                <div className="sc-label mt-4 sc-blink text-acid">
-                  decoding…
-                </div>
-              )}
-            </div>
-          )}
-          {tab === "mic" && <MicPanel onReady={onReady} onError={setError} />}
-          {tab === "osc" && <OscPanel onReady={onReady} />}
-          {tab === "library" && <LibraryPanel onReady={onReady} />}
-          {error && (
-            <div className="mt-4 border border-[#5c2a2a] p-3 text-[10px] text-[#e06c5c]">
-              {error}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ---------------- microphone ---------------- */
 
-function MicPanel({
+export function MicPanel({
   onReady,
   onError,
 }: {
@@ -222,8 +105,7 @@ function MicPanel({
   };
 
   return (
-    <div className="flex h-48 flex-col items-center justify-center gap-4">
-      {/* level meter */}
+    <div className="flex h-full flex-col items-center justify-center gap-3">
       <div className="h-1.5 w-56 overflow-hidden bg-line">
         <div
           className="h-full bg-acid transition-[width] duration-75"
@@ -231,9 +113,7 @@ function MicPanel({
         />
       </div>
       {state === "recording" && (
-        <div className="sc-readout sc-blink">
-          ● REC {elapsed.toFixed(1)}s
-        </div>
+        <div className="sc-readout sc-blink">● REC {elapsed.toFixed(1)}s</div>
       )}
       <div className="flex gap-2">
         {state === "idle" && (
@@ -269,8 +149,7 @@ function MicPanel({
         )}
       </div>
       <div className="sc-label text-center">
-        {state === "idle" &&
-          "your browser will ask for mic permission"}
+        {state === "idle" && "your browser will ask for mic permission"}
         {state === "recording" && "make a sound — anything works"}
         {state === "done" && "happy with it?"}
       </div>
@@ -280,7 +159,7 @@ function MicPanel({
 
 /* ---------------- oscillator ---------------- */
 
-function OscPanel({ onReady }: { onReady: (i: SourceInfo) => void }) {
+export function OscPanel({ onReady }: { onReady: (i: SourceInfo) => void }) {
   const [p, setP] = useState<OscParams>({ ...DEFAULT_OSC });
   const [busy, setBusy] = useState(false);
   const waves: OscillatorType[] = ["sine", "triangle", "sawtooth", "square"];
@@ -311,13 +190,13 @@ function OscPanel({ onReady }: { onReady: (i: SourceInfo) => void }) {
   };
 
   return (
-    <div className="flex h-48 flex-col justify-center gap-4">
+    <div className="flex h-full flex-col justify-center gap-3 px-4">
       <div className="flex gap-1">
         {waves.map((w) => (
           <button
             key={w}
             onClick={() => set("waveform", w)}
-            className={`flex-1 border px-2 py-2 text-[10px] uppercase tracking-wider ${
+            className={`flex-1 border px-2 py-1.5 font-sub text-[10px] uppercase tracking-wider ${
               p.waveform === w
                 ? "border-acid text-acid"
                 : "border-line text-dim hover:text-bone"
@@ -337,7 +216,9 @@ function OscPanel({ onReady }: { onReady: (i: SourceInfo) => void }) {
         ] as const
       ).map(([k, min, max, unit, step]) => (
         <div key={k} className="flex items-center gap-3">
-          <div className="sc-label w-16">{k === "lfoRate" ? "LFO rate" : k === "lfoDepth" ? "LFO amt" : k}</div>
+          <div className="sc-label w-16">
+            {k === "lfoRate" ? "LFO rate" : k === "lfoDepth" ? "LFO amt" : k}
+          </div>
           <input
             className="sc-slider flex-1"
             type="range"
@@ -359,10 +240,8 @@ function OscPanel({ onReady }: { onReady: (i: SourceInfo) => void }) {
             <button
               key={m}
               onClick={() => set("mode", m)}
-              className={`border px-3 py-1.5 text-[10px] uppercase tracking-wider ${
-                p.mode === m
-                  ? "border-acid text-acid"
-                  : "border-line text-dim"
+              className={`border px-3 py-1.5 font-sub text-[10px] uppercase tracking-wider ${
+                p.mode === m ? "border-acid text-acid" : "border-line text-dim"
               }`}
             >
               {m === "granular" ? "→ granular" : "play direct"}
@@ -388,7 +267,11 @@ function OscPanel({ onReady }: { onReady: (i: SourceInfo) => void }) {
 
 /* ---------------- discover ---------------- */
 
-function LibraryPanel({ onReady }: { onReady: (i: SourceInfo) => void }) {
+export function LibraryPanel({
+  onReady,
+}: {
+  onReady: (i: SourceInfo) => void;
+}) {
   const [sound, setSound] = useState<LibrarySound>(
     () => LIBRARY[(Math.random() * LIBRARY.length) | 0]
   );
@@ -419,10 +302,12 @@ function LibraryPanel({ onReady }: { onReady: (i: SourceInfo) => void }) {
   useEffect(() => () => engine.stopPreview(), []);
 
   return (
-    <div className="flex h-48 flex-col justify-center gap-4">
-      <div className="border border-line p-4">
-        <div className="sc-label mb-1">field recording · generated in-browser</div>
-        <div className="font-display text-xl font-bold text-bone">
+    <div className="flex h-full flex-col justify-center gap-3 px-4">
+      <div className="border border-line p-3">
+        <div className="sc-label mb-1">
+          field recording · generated in-browser
+        </div>
+        <div className="font-display text-lg text-bone">
           {sound.name}
         </div>
         <div className="mt-1 text-[10px] text-dim">{sound.description}</div>

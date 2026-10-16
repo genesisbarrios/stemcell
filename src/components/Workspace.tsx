@@ -15,11 +15,14 @@ import Visualizer from "./Visualizer";
 import Keyboard from "./Keyboard";
 import RecorderBar from "./RecorderBar";
 import PresetBar from "./PresetBar";
+import { LibraryPanel, MicPanel, OscPanel } from "./SourcePanels";
 
 const KEYMAP: Record<string, number> = {
   a: 0, w: 1, s: 2, e: 3, d: 4, f: 5, t: 6, g: 7, y: 8, h: 9, u: 10,
   j: 11, k: 12, o: 13, l: 14, p: 15, ";": 16,
 };
+
+type Panel = "choose" | "mic" | "osc" | "library" | null;
 
 export default function Workspace({
   source,
@@ -29,22 +32,24 @@ export default function Workspace({
   osc,
   onGranular,
   onFx,
-  onReplace,
   onSourceLoaded,
 }: {
-  source: SourceInfo;
+  source: SourceInfo | null;
   buffer: AudioBuffer | null;
   granular: GranularParams;
   fx: FxParams;
   osc: OscParams | null;
   onGranular: <K extends keyof GranularParams>(k: K, v: number) => void;
   onFx: <K extends keyof FxParams>(k: K, v: number) => void;
-  onReplace: () => void;
   onSourceLoaded: (i: SourceInfo) => void;
 }) {
   const [octave, setOctave] = useState(4);
   const [poly, setPoly] = useState(true);
   const [dragOver, setDragOver] = useState(false);
+  const [panel, setPanel] = useState<Panel>(null);
+  const [panelError, setPanelError] = useState("");
+  const [importing, setImporting] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
   const [active, setActive] = useState<Set<number>>(new Set());
   const [lastNote, setLastNote] = useState<number | null>(null);
   const grainFrame = useRef<GrainFrame | null>(null);
@@ -60,7 +65,7 @@ export default function Workspace({
     }
     monoRef.current = midi;
     heldRef.current.add(midi);
-    engine.noteOn(midi, source.kind === "osc" ? osc : null);
+    engine.noteOn(midi, source?.kind === "osc" ? osc : null);
     setLastNote(midi);
     setActive(new Set(heldRef.current));
   };
@@ -72,6 +77,14 @@ export default function Workspace({
     setActive(new Set(heldRef.current));
   };
 
+  const stopAll = () => {
+    heldRef.current.clear();
+    monoRef.current = null;
+    engine.allNotesOff();
+    engine.stopPreview();
+    setActive(new Set());
+  };
+
   // grain markers → waveform
   useEffect(() => {
     engine.onGrainFrame = (f) => {
@@ -81,6 +94,13 @@ export default function Workspace({
       engine.onGrainFrame = null;
     };
   }, []);
+
+  const noteOnRef = useRef(noteOn);
+  const noteOffRef = useRef(noteOff);
+  const baseMidiRef = useRef(baseMidi);
+  noteOnRef.current = noteOn;
+  noteOffRef.current = noteOff;
+  baseMidiRef.current = baseMidi;
 
   // computer keyboard
   useEffect(() => {
@@ -113,13 +133,6 @@ export default function Workspace({
     };
   }, []);
 
-  const noteOnRef = useRef(noteOn);
-  const noteOffRef = useRef(noteOff);
-  const baseMidiRef = useRef(baseMidi);
-  noteOnRef.current = noteOn;
-  noteOffRef.current = noteOff;
-  baseMidiRef.current = baseMidi;
-
   // MIDI input
   useEffect(() => {
     let access: MIDIAccess | null = null;
@@ -146,6 +159,27 @@ export default function Workspace({
     };
   }, []);
 
+  const importFile = async (f: File) => {
+    stopAll();
+    setImporting(true);
+    setPanelError("");
+    try {
+      const info = await engine.loadFile(f);
+      setPanel(null);
+      onSourceLoaded(info);
+    } catch {
+      setPanelError("couldn't decode that file — try WAV, MP3 or OGG");
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  const handleReady = (info: SourceInfo) => {
+    setPanel(null);
+    setPanelError("");
+    onSourceLoaded(info);
+  };
+
   const applyPreset = (
     g: Partial<GranularParams>,
     f: Partial<FxParams>
@@ -155,13 +189,8 @@ export default function Workspace({
     for (const k in f) onFx(k as keyof FxParams, f[k as keyof FxParams]!);
   };
 
-  const stopAll = () => {
-    heldRef.current.clear();
-    monoRef.current = null;
-    engine.allNotesOff();
-    engine.stopPreview();
-    setActive(new Set());
-  };
+  const showChooser = !buffer || panel === "choose";
+  const showPanel = panel !== null && panel !== "choose";
 
   return (
     <div
@@ -171,53 +200,58 @@ export default function Workspace({
         setDragOver(true);
       }}
       onDragLeave={() => setDragOver(false)}
-      onDrop={async (e) => {
+      onDrop={(e) => {
         e.preventDefault();
         setDragOver(false);
         const f = e.dataTransfer.files?.[0];
-        if (!f) return;
-        stopAll();
-        try {
-          onSourceLoaded(await engine.loadFile(f));
-        } catch {
-          /* unsupported file — keep current source */
-        }
+        if (f) importFile(f);
       }}
     >
       {dragOver && (
         <div className="pointer-events-none absolute inset-0 z-40 flex items-center justify-center border-2 border-dashed border-acid bg-void/80">
-          <div className="font-display text-xl font-bold tracking-widest text-acid">
-            DROP TO REPLACE SOURCE
+          <div className="font-display text-xl tracking-widest text-acid">
+            DROP TO LOAD SOURCE
           </div>
         </div>
       )}
       {/* header */}
       <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-3">
         <div className="flex items-center gap-4">
-          <div className="font-display text-sm font-black tracking-[0.3em]">
-            STEM<span className="text-acid">CELL</span>
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo/logo-horizontal_for-dark-bg.svg"
+            alt="STEMCELL"
+            className="h-5 w-auto"
+          />
           <div className="h-4 w-px bg-line" />
-          <div>
-            <div className="text-[11px] text-bone">{source.name}</div>
-            <div className="sc-label">
-              {source.kind} · {source.duration.toFixed(2)}s ·{" "}
-              {source.channels}ch
-              {source.attribution ? ` · ${source.attribution}` : ""}
+          {source ? (
+            <div>
+              <div className="text-[11px] text-bone">{source.name}</div>
+              <div className="sc-label">
+                {source.kind} · {source.duration.toFixed(2)}s ·{" "}
+                {source.channels}ch
+                {source.attribution ? ` · ${source.attribution}` : ""}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="sc-label">no source loaded</div>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <RecorderBar />
           <div className="h-4 w-px bg-line" />
-          <button className="sc-btn" onClick={() => engine.preview()}>
+          <button
+            className="sc-btn"
+            onClick={() => engine.preview()}
+            disabled={!buffer}
+          >
             ▶ source
           </button>
-          <button className="sc-btn" onClick={stopAll}>
+          <button className="sc-btn" onClick={stopAll} disabled={!buffer}>
             ⏹ all
           </button>
-          <button className="sc-btn" onClick={onReplace}>
-            ⟲ replace
+          <button className="sc-btn" onClick={() => setPanel("choose")}>
+            ⟲ source
           </button>
         </div>
       </header>
@@ -227,12 +261,14 @@ export default function Workspace({
         {/* left: waveform + granular */}
         <section className="sc-panel flex flex-col lg:col-span-7">
           <div className="flex items-center justify-between border-b border-line px-4 py-2">
-            <span className="sc-label">source / drag to select region · click to set position</span>
+            <span className="sc-label">
+              source / drag to select region · click to set position
+            </span>
             <span className="sc-readout">
               {lastNote !== null ? `note ${lastNote}` : ""}
             </span>
           </div>
-          <div className="h-40 border-b border-line sm:h-48">
+          <div className="relative h-40 border-b border-line sm:h-48">
             <WaveformEditor
               buffer={buffer}
               regionStart={granular.regionStart}
@@ -244,6 +280,96 @@ export default function Workspace({
                 onGranular("regionEnd", Math.max(b, a + 0.005));
               }}
               onPosition={(p) => onGranular("position", p)}
+            />
+
+            {/* source chooser / panels — overlaid on the waveform */}
+            {(showChooser || showPanel) && (
+              <div className="absolute inset-0 flex flex-col bg-void/90">
+                {showChooser && (
+                  <div className="flex flex-1 flex-col items-center justify-center gap-4">
+                    <div className="sc-label">load a source</div>
+                    <div className="flex flex-wrap items-center justify-center gap-2 px-4">
+                      <button
+                        className="sc-btn sc-btn-acid"
+                        onClick={() => setPanel("mic")}
+                      >
+                        ● record
+                      </button>
+                      <button
+                        className="sc-btn"
+                        onClick={() => fileRef.current?.click()}
+                        disabled={importing}
+                      >
+                        {importing ? "decoding…" : "↑ import"}
+                      </button>
+                      <button
+                        className="sc-btn"
+                        onClick={() => setPanel("library")}
+                      >
+                        ◎ browse
+                      </button>
+                      <button
+                        className="sc-btn"
+                        onClick={() => setPanel("osc")}
+                      >
+                        ~ generate
+                      </button>
+                    </div>
+                    <div className="sc-label">
+                      or drop an audio file anywhere
+                    </div>
+                    {panelError && (
+                      <div className="px-4 text-center text-[10px] text-[#e06c5c]">
+                        {panelError}
+                      </div>
+                    )}
+                    {buffer && (
+                      <button
+                        className="sc-btn mt-1"
+                        onClick={() => setPanel(null)}
+                      >
+                        ✕ close
+                      </button>
+                    )}
+                  </div>
+                )}
+                {panel === "mic" && (
+                  <MicPanel onReady={handleReady} onError={setPanelError} />
+                )}
+                {panel === "osc" && <OscPanel onReady={handleReady} />}
+                {panel === "library" && (
+                  <LibraryPanel onReady={handleReady} />
+                )}
+                {showPanel && (
+                  <div className="absolute right-2 top-2">
+                    <button
+                      className="sc-btn px-2 py-1"
+                      onClick={() => {
+                        setPanel("choose");
+                        setPanelError("");
+                      }}
+                    >
+                      ←
+                    </button>
+                  </div>
+                )}
+                {showPanel && panelError && (
+                  <div className="absolute bottom-2 left-0 right-0 px-4 text-center text-[10px] text-[#e06c5c]">
+                    {panelError}
+                  </div>
+                )}
+              </div>
+            )}
+            <input
+              ref={fileRef}
+              type="file"
+              accept="audio/*"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) importFile(f);
+                e.target.value = "";
+              }}
             />
           </div>
           <div className="border-b border-line px-4 py-2">

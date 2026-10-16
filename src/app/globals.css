@@ -7,9 +7,11 @@
   --color-bone: #f0ede3;
   --color-dim: #83837a;
   --color-line: #26261f;
-  --color-acid: #d4ff2f;
-  --color-acid-dim: #9dbf1e;
-  --font-display: var(--font-archivo), sans-serif;
+  --color-acid: #3fd8f0;
+  --color-acid-dim: #2a9db3;
+  --font-display: var(--font-oi), var(--font-archivo), sans-serif;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sub: var(--font-michroma), var(--font-archivo), sans-serif;
   --font-mono: var(--font-jbmono), monospace;
 }
 
@@ -17,7 +19,7 @@ html,
 body {
   background: var(--color-void);
   color: var(--color-bone);
-  font-family: var(--font-mono);
+  font-family: var(--font-sub);
   overscroll-behavior: none;
 }
 
@@ -104,6 +106,7 @@ input[type="range"].sc-fader {
 }
 
 .sc-label {
+  font-family: var(--font-sub);
   font-size: 9px;
   letter-spacing: 0.18em;
   color: var(--color-dim);
@@ -124,6 +127,7 @@ input[type="range"].sc-fader {
 .sc-btn {
   border: 1px solid var(--color-line);
   color: var(--color-bone);
+  font-family: var(--font-sub);
   font-size: 10px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -145,7 +149,7 @@ input[type="range"].sc-fader {
   border-color: var(--color-acid);
 }
 .sc-btn-acid:hover {
-  background: #e2ff5e;
+  background: #b0e7eb;
   color: #0b0b0a;
 }
 .sc-btn-danger {

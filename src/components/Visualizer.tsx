@@ -92,10 +92,10 @@ export default function Visualizer() {
         else ctx.lineTo(x, y);
       }
       ctx.closePath();
-      ctx.strokeStyle = amp > 0.02 ? "#d4ff2f" : "#4a4a40";
+      ctx.strokeStyle = amp > 0.02 ? "#3fd8f0" : "#4a4a40";
       ctx.lineWidth = 1.2;
       ctx.stroke();
-      ctx.fillStyle = `rgba(212,255,47,${Math.min(0.12, amp * 0.2)})`;
+      ctx.fillStyle = `rgba(63,216,240,${Math.min(0.12, amp * 0.2)})`;
       ctx.fill();
 
       // spectrum nucleus — radial bars
@@ -106,7 +106,7 @@ export default function Visualizer() {
         const a = (i / bars) * Math.PI * 2 - Math.PI / 2;
         const r0 = base * 0.18;
         const r1 = r0 + v * base * 0.5;
-        ctx.strokeStyle = `rgba(212,255,47,${0.25 + v * 0.75})`;
+        ctx.strokeStyle = `rgba(63,216,240,${0.25 + v * 0.75})`;
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0);
@@ -116,7 +116,7 @@ export default function Visualizer() {
 
       // nucleus dot
       const nr = base * (0.1 + spec * 0.35);
-      ctx.fillStyle = `rgba(212,255,47,${0.5 + spec * 0.5})`;
+      ctx.fillStyle = `rgba(63,216,240,${0.5 + spec * 0.5})`;
       ctx.beginPath();
       ctx.arc(cx, cy, Math.max(2.5, nr * 0.35), 0, Math.PI * 2);
       ctx.fill();
