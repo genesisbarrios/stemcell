@@ -33,6 +33,7 @@ export default function Workspace({
   onGranular,
   onFx,
   onSourceLoaded,
+  onHome,
 }: {
   source: SourceInfo | null;
   buffer: AudioBuffer | null;
@@ -42,6 +43,7 @@ export default function Workspace({
   onGranular: <K extends keyof GranularParams>(k: K, v: number) => void;
   onFx: <K extends keyof FxParams>(k: K, v: number) => void;
   onSourceLoaded: (i: SourceInfo) => void;
+  onHome: () => void;
 }) {
   const [octave, setOctave] = useState(4);
   const [poly, setPoly] = useState(true);
@@ -217,12 +219,18 @@ export default function Workspace({
       {/* header */}
       <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-2">
         <div className="flex items-center gap-4">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo/logo-horizontal_for-dark-bg.svg"
-            alt="STEMCELL"
-            className="h-5 w-auto"
-          />
+          <button
+            onClick={onHome}
+            aria-label="back to home"
+            className="transition-opacity hover:opacity-70"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo/logo-horizontal_for-dark-bg.svg"
+              alt="STEMCELL"
+              className="h-5 w-auto"
+            />
+          </button>
           <div className="h-4 w-px bg-line" />
           {source ? (
             <div>

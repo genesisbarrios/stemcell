@@ -77,6 +77,11 @@ export default function StemcellApp() {
             onGranular={onGranular}
             onFx={onFx}
             onSourceLoaded={ready}
+            onHome={() => {
+              engine.allNotesOff();
+              engine.stopPreview();
+              setView("landing");
+            }}
           />
         </motion.div>
       )}
