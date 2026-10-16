@@ -51,17 +51,18 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             audio into grains and rebuilds it under your fingers.
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, y: [0, -14, 0] }}
-            transition={{
-              opacity: { delay: 0.5, duration: 0.6 },
-              y: { repeat: Infinity, duration: 5, ease: "easeInOut" },
-            }}
-            className="pointer-events-none absolute bottom-[8%] right-[5%] hidden lg:block"
-          >
-            <HeroWaveform className="h-48 w-48 xl:h-64 xl:w-64" />
-          </motion.div>
+          <div className="pointer-events-none absolute right-[5%] top-1/2 hidden -translate-y-1/2 lg:block">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, y: [0, -14, 0] }}
+              transition={{
+                opacity: { delay: 0.5, duration: 0.6 },
+                y: { repeat: Infinity, duration: 5, ease: "easeInOut" },
+              }}
+            >
+              <HeroWaveform className="h-48 w-48 xl:h-64 xl:w-64" />
+            </motion.div>
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: 16 }}
