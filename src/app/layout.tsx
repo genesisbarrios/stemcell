@@ -6,7 +6,7 @@ const description =
   "stemcell is a free online granular synth. turn your voice into an instrument or turn any sound into an instrument — capture it, shred it into grains, and play it differently in your browser. no download, no account.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://influanto.com"),
+  metadataBase: new URL("https://stemcell.enigma-labs.com"),
   title,
   description,
   keywords: [
@@ -23,12 +23,12 @@ export const metadata: Metadata = {
     "free synth",
     "free music tools",
   ],
-  alternates: { canonical: "https://influanto.com/stemcell" },
+  alternates: { canonical: "https://stemcell.enigma-labs.com" },
   openGraph: {
     title,
     description,
     type: "website",
-    url: "https://influanto.com/stemcell",
+    url: "https://stemcell.enigma-labs.com",
     siteName: "stemcell",
     images: [
       {
@@ -52,7 +52,7 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   name: "stemcell",
-  url: "https://influanto.com/stemcell",
+  url: "https://stemcell.enigma-labs.com",
   applicationCategory: "MultimediaApplication",
   operatingSystem: "Any",
   browserRequirements: "Requires JavaScript and Web Audio API support",
