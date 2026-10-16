@@ -9,10 +9,10 @@
   --color-line: #26261f;
   --color-acid: #3fd8f0;
   --color-acid-dim: #2a9db3;
-  --font-display: var(--font-oi), var(--font-archivo), sans-serif;
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
-  --font-sub: var(--font-michroma), var(--font-archivo), sans-serif;
-  --font-mono: var(--font-jbmono), monospace;
+  --font-display: "Oi", sans-serif;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-sub: "Michroma", sans-serif;
+  --font-mono: ui-monospace, monospace;
 }
 
 html,

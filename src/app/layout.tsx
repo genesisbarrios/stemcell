@@ -1,30 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, JetBrains_Mono, Michroma, Oi } from "next/font/google";
 import "./globals.css";
-
-const archivo = Archivo({
-  variable: "--font-archivo",
-  subsets: ["latin"],
-  weight: ["400", "600", "800", "900"],
-});
-
-const oi = Oi({
-  variable: "--font-oi",
-  subsets: ["latin"],
-  weight: "400",
-});
-
-const michroma = Michroma({
-  variable: "--font-michroma",
-  subsets: ["latin"],
-  weight: "400",
-});
-
-const jbmono = JetBrains_Mono({
-  variable: "--font-jbmono",
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-});
 
 export const metadata: Metadata = {
   title: "STEMCELL — Every sound is an instrument",
@@ -39,11 +14,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${archivo.variable} ${jbmono.variable} ${oi.variable} ${michroma.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossOrigin="anonymous"
+      />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Michroma&family=Oi&display=swap"
+        rel="stylesheet"
+      />
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
