@@ -46,6 +46,7 @@ export default function Workspace({
   onHome: () => void;
 }) {
   const [octave, setOctave] = useState(4);
+  const [wide, setWide] = useState(false);
   const [poly, setPoly] = useState(true);
   const [dragOver, setDragOver] = useState(false);
   const [panel, setPanel] = useState<Panel>(null);
@@ -87,6 +88,14 @@ export default function Workspace({
     engine.stopPreview();
     setActive(new Set());
   };
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 640px)");
+    const f = () => setWide(mq.matches);
+    f();
+    mq.addEventListener("change", f);
+    return () => mq.removeEventListener("change", f);
+  }, []);
 
   // grain markers → waveform
   useEffect(() => {
@@ -260,66 +269,94 @@ export default function Workspace({
             ⏹ all
           </button>
           <button className="sc-btn" onClick={() => setPanel("choose")}>
-            ⟲ source
+            + new
           </button>
         </div>
       </header>
 
       {/* main */}
-      <main className="grid min-h-0 flex-1 grid-cols-1 gap-px overflow-y-auto bg-line lg:grid-cols-2 lg:overflow-visible">
-        {/* left: waveform + granular */}
-        <section className="sc-panel relative flex min-h-0 flex-col">
-          <div className="flex h-7 items-center sm:h-9 justify-between border-b border-line px-4">
-            <span className="sc-label">
-              source / drag to select region · click to set position
-            </span>
-            <div className="flex items-center gap-2">
+      <main className="relative flex min-h-0 flex-1 flex-col gap-px overflow-y-auto bg-line lg:grid lg:grid-cols-2 lg:grid-rows-[minmax(0,1fr)] lg:overflow-visible">
+        {/* desktop left column: source + granular */}
+        <div className="contents lg:flex lg:min-h-0 lg:flex-col lg:gap-px">
+          <section className="sc-panel relative order-1 flex flex-col">
+            <div className="flex h-7 items-center justify-between border-b border-line px-4 sm:h-9">
+              <span className="sc-label">
+                source / drag to select region · click to set position
+              </span>
               <span className="sc-readout">
                 {lastNote !== null ? `note ${lastNote}` : ""}
               </span>
-              {buffer && (
-                <button
-                  className="sc-btn px-2 py-0.5"
-                  onClick={() => {
-                    stopAll();
-                    setPanel("choose");
-                  }}
-                >
-                  + new sound
-                </button>
-              )}
+            </div>
+            <div className="relative h-24 sm:h-44">
+              <WaveformEditor
+                buffer={buffer}
+                regionStart={granular.regionStart}
+                regionEnd={granular.regionEnd}
+                position={granular.position}
+                grainFrame={grainFrame}
+                onRegion={(a, b) => {
+                  onGranular("regionStart", a);
+                  onGranular("regionEnd", Math.max(b, a + 0.005));
+                }}
+                onPosition={(p) => onGranular("position", p)}
+              />
+              <input
+                ref={fileRef}
+                type="file"
+                accept="audio/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) importFile(f);
+                  e.target.value = "";
+                }}
+              />
+            </div>
+          </section>
+          <section className="sc-panel order-3 flex flex-col lg:min-h-0 lg:flex-1">
+            <div className="flex h-7 items-center border-b border-line px-4 sm:h-9">
+              <span className="sc-label">granular engine</span>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto p-2 sm:p-3">
+              <GranularControls params={granular} onChange={onGranular} />
+            </div>
+          </section>
+        </div>
+
+        {/* desktop right column: organism + fx + mutations */}
+        <div className="contents lg:flex lg:min-h-0 lg:flex-col lg:gap-px">
+          <section className="sc-panel order-2 flex flex-col lg:min-h-0 lg:flex-1">
+            <div className="flex h-7 items-center border-b border-line px-4 sm:h-9">
+              <span className="sc-label">organism</span>
+            </div>
+            <div className="h-32 min-h-0 lg:h-auto lg:flex-1">
+              <Visualizer />
+            </div>
+          </section>
+          <div className="order-4 flex flex-col">
+            <div className="sc-panel border-b border-line p-2 sm:p-3">
+              <div className="sc-label mb-2">effects</div>
+              <EffectsPanel fx={fx} onChange={onFx} />
+            </div>
+            <div className="sc-panel p-2 sm:p-3">
+              <button
+                className={`sc-label flex w-full items-center justify-between lg:pointer-events-none ${mutOpen ? "mb-2" : ""} lg:mb-2`}
+                onClick={() => setMutOpen((o) => !o)}
+                aria-expanded={mutOpen}
+              >
+                <span>mutations</span>
+                <span className="lg:hidden">{mutOpen ? "−" : "+"}</span>
+              </button>
+              <div className={`${mutOpen ? "block" : "hidden"} lg:block`}>
+                <PresetBar granular={granular} fx={fx} apply={applyPreset} />
+              </div>
             </div>
           </div>
-          <div className="relative h-24 border-b border-line sm:h-44">
-            <WaveformEditor
-              buffer={buffer}
-              regionStart={granular.regionStart}
-              regionEnd={granular.regionEnd}
-              position={granular.position}
-              grainFrame={grainFrame}
-              onRegion={(a, b) => {
-                onGranular("regionStart", a);
-                onGranular("regionEnd", Math.max(b, a + 0.005));
-              }}
-              onPosition={(p) => onGranular("position", p)}
-            />
+        </div>
 
-            <input
-              ref={fileRef}
-              type="file"
-              accept="audio/*"
-              className="hidden"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) importFile(f);
-                e.target.value = "";
-              }}
-            />
-          </div>
-
-          {/* source chooser / panels — overlaid on the whole left column */}
-          {(showChooser || showPanel) && (
-            <div className="absolute inset-0 z-10 flex flex-col overflow-y-auto bg-void/95">
+        {/* source chooser / panels — overlaid on the whole main area */}
+        {(showChooser || showPanel) && (
+          <div className="absolute inset-0 z-10 flex flex-col overflow-y-auto bg-void/95">
                 {showChooser && (
                   <div className="flex flex-1 flex-col items-center justify-center gap-4">
                     <div className="sc-label">load a source</div>
@@ -395,42 +432,6 @@ export default function Workspace({
                 )}
               </div>
             )}
-          <div className="flex h-7 items-center sm:h-9 border-b border-line px-4">
-            <span className="sc-label">granular engine</span>
-          </div>
-          <div className="min-h-0 flex-1 overflow-y-auto p-2 sm:p-3">
-            <GranularControls params={granular} onChange={onGranular} />
-          </div>
-        </section>
-
-        {/* right: visualizer + fx + presets */}
-        <section className="flex min-h-0 flex-col">
-          <div className="sc-panel flex min-h-0 flex-1 flex-col border-b border-line">
-            <div className="flex h-7 items-center sm:h-9 border-b border-line px-4">
-              <span className="sc-label">organism</span>
-            </div>
-            <div className="h-32 min-h-0 sm:h-auto sm:flex-1">
-              <Visualizer />
-            </div>
-          </div>
-          <div className="sc-panel border-b border-line p-2 sm:p-3">
-            <div className="sc-label mb-2">effects</div>
-            <EffectsPanel fx={fx} onChange={onFx} />
-          </div>
-          <div className="sc-panel p-2 sm:p-3">
-            <button
-              className={`sc-label flex w-full items-center justify-between lg:pointer-events-none ${mutOpen ? "mb-2" : ""} lg:mb-2`}
-              onClick={() => setMutOpen((o) => !o)}
-              aria-expanded={mutOpen}
-            >
-              <span>mutations</span>
-              <span className="lg:hidden">{mutOpen ? "−" : "+"}</span>
-            </button>
-            <div className={`${mutOpen ? "block" : "hidden"} lg:block`}>
-              <PresetBar granular={granular} fx={fx} apply={applyPreset} />
-            </div>
-          </div>
-        </section>
       </main>
 
       {/* keyboard */}
@@ -466,6 +467,7 @@ export default function Workspace({
         <div className="h-20 sm:h-28">
           <Keyboard
             octave={baseMidi}
+            octaves={wide ? 3 : 2}
             active={active}
             onNoteOn={noteOn}
             onNoteOff={noteOff}

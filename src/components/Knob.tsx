@@ -35,10 +35,10 @@ export default function Knob({
     : `${value.toFixed(step >= 1 ? 0 : step >= 0.1 ? 1 : 2)}${unit}`;
 
   return (
-    <div className="flex w-12 select-none flex-col items-center gap-0.5 sm:w-16">
+    <div className="flex w-10 select-none flex-col items-center gap-0.5 sm:w-16">
       <svg
         viewBox="0 0 40 40"
-        className="h-9 w-9 cursor-ns-resize touch-none sm:h-11 sm:w-11"
+        className="h-8 w-8 cursor-ns-resize touch-none sm:h-11 sm:w-11"
         role="slider"
         aria-label={label}
         aria-valuemin={min}

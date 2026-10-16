@@ -11,7 +11,7 @@ export default function EffectsPanel({
   onChange: <K extends keyof FxParams>(k: K, v: number) => void;
 }) {
   return (
-    <div className="flex flex-wrap justify-center gap-x-2 gap-y-3">
+    <div className="flex flex-nowrap items-start justify-between gap-x-1 sm:flex-wrap sm:justify-center sm:gap-x-2 sm:gap-y-3">
       <Knob
         label="high-pass"
         value={fx.hp}

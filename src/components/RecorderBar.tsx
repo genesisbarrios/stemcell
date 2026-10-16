@@ -104,7 +104,9 @@ export default function RecorderBar() {
         </>
       )}
       {blob && state === "done" && (
-        <span className="sc-label">{(blob.size / 1024).toFixed(0)}kb</span>
+        <span className="sc-label hidden sm:inline">
+          {(blob.size / 1024).toFixed(0)}kb
+        </span>
       )}
     </div>
   );

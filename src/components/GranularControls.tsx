@@ -11,7 +11,7 @@ export default function GranularControls({
   onChange: <K extends keyof GranularParams>(k: K, v: number) => void;
 }) {
   return (
-    <div className="grid grid-cols-5 gap-x-1 gap-y-2 sm:gap-x-2 sm:gap-y-3">
+    <div className="grid grid-cols-5 justify-items-center gap-x-1 gap-y-2 sm:gap-x-2 sm:gap-y-3">
       <Knob
         label="position"
         value={params.position}
