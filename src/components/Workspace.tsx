@@ -217,7 +217,7 @@ export default function Workspace({
         </div>
       )}
       {/* header */}
-      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-2">
+      <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-1.5 sm:py-2">
         <div className="flex items-center gap-4">
           <button
             onClick={onHome}
@@ -228,7 +228,7 @@ export default function Workspace({
             <img
               src="/logo/logo-horizontal_for-dark-bg.svg"
               alt="STEMCELL"
-              className="h-5 w-auto"
+              className="h-4 w-auto sm:h-5"
             />
           </button>
           <div className="h-4 w-px bg-line" />
@@ -268,7 +268,7 @@ export default function Workspace({
       <main className="grid min-h-0 flex-1 grid-cols-1 gap-px overflow-y-auto bg-line lg:grid-cols-2 lg:overflow-visible">
         {/* left: waveform + granular */}
         <section className="sc-panel relative flex min-h-0 flex-col">
-          <div className="flex h-9 items-center justify-between border-b border-line px-4">
+          <div className="flex h-7 items-center sm:h-9 justify-between border-b border-line px-4">
             <span className="sc-label">
               source / drag to select region · click to set position
             </span>
@@ -289,7 +289,7 @@ export default function Workspace({
               )}
             </div>
           </div>
-          <div className="relative h-36 border-b border-line sm:h-44">
+          <div className="relative h-24 border-b border-line sm:h-44">
             <WaveformEditor
               buffer={buffer}
               regionStart={granular.regionStart}
@@ -394,10 +394,10 @@ export default function Workspace({
                 )}
               </div>
             )}
-          <div className="flex h-9 items-center border-b border-line px-4">
+          <div className="flex h-7 items-center sm:h-9 border-b border-line px-4">
             <span className="sc-label">granular engine</span>
           </div>
-          <div className="min-h-0 flex-1 overflow-y-auto p-3">
+          <div className="min-h-0 flex-1 overflow-y-auto p-2 sm:p-3">
             <GranularControls params={granular} onChange={onGranular} />
           </div>
         </section>
@@ -405,18 +405,18 @@ export default function Workspace({
         {/* right: visualizer + fx + presets */}
         <section className="flex min-h-0 flex-col">
           <div className="sc-panel flex min-h-0 flex-1 flex-col border-b border-line">
-            <div className="flex h-9 items-center border-b border-line px-4">
+            <div className="flex h-7 items-center sm:h-9 border-b border-line px-4">
               <span className="sc-label">organism</span>
             </div>
-            <div className="min-h-0 flex-1">
+            <div className="h-32 min-h-0 sm:h-auto sm:flex-1">
               <Visualizer />
             </div>
           </div>
-          <div className="sc-panel border-b border-line p-3">
+          <div className="sc-panel border-b border-line p-2 sm:p-3">
             <div className="sc-label mb-2">effects</div>
             <EffectsPanel fx={fx} onChange={onFx} />
           </div>
-          <div className="sc-panel p-3">
+          <div className="sc-panel p-2 sm:p-3">
             <div className="sc-label mb-2">mutations</div>
             <PresetBar granular={granular} fx={fx} apply={applyPreset} />
           </div>
@@ -453,7 +453,7 @@ export default function Workspace({
             keys a–; play · z/x octave · space preview · m mono/poly
           </div>
         </div>
-        <div className="h-24 sm:h-28">
+        <div className="h-20 sm:h-28">
           <Keyboard
             octave={baseMidi}
             active={active}
