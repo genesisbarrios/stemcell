@@ -51,6 +51,15 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             audio into grains and rebuilds it under your fingers.
           </motion.p>
 
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="my-8 flex justify-center lg:hidden"
+          >
+            <HeroWaveform className="h-44 w-44 sm:h-56 sm:w-56" />
+          </motion.div>
+
           <div className="pointer-events-none absolute right-[5%] top-1/2 hidden -translate-y-1/2 lg:block">
             <motion.div
               initial={{ opacity: 0 }}
@@ -96,7 +105,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
           </div>
           <div className="flex items-center gap-4 text-dim">
             <a
-              href="https://instagram.com/genesisbarrios"
+              href="https://instagram.com/_influanto"
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram"
@@ -109,7 +118,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
               </svg>
             </a>
             <a
-              href="https://tiktok.com/@genesisbarrios"
+              href="https://tiktok.com/@_influanto"
               target="_blank"
               rel="noreferrer"
               aria-label="TikTok"
@@ -120,7 +129,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
               </svg>
             </a>
             <a
-              href="https://enigma-labs.com"
+              href="https://influanto.com"
               target="_blank"
               rel="noreferrer"
               aria-label="Website"
@@ -133,7 +142,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
               </svg>
             </a>
             <a
-              href="mailto:hello@enigma-labs.com"
+              href="mailto:info@influanto.com"
               aria-label="Email"
               className="transition-colors hover:text-acid"
             >

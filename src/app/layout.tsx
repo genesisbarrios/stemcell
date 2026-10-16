@@ -3,10 +3,10 @@ import "./globals.css";
 
 const title = "stemcell — free online granular synth";
 const description =
-  "stemcell is a free online granular synth that runs in your browser. turn your voice into an instrument or turn any sound into an instrument — capture it, shred it into grains, and play it differently. no download, no account.";
+  "stemcell is a free online granular synth on influanto. turn your voice into an instrument or turn any sound into an instrument — capture it, shred it into grains, and play it differently in your browser. no download, no account.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.enigma-labs.com"),
+  metadataBase: new URL("https://influanto.com"),
   title,
   description,
   keywords: [
@@ -21,13 +21,15 @@ export const metadata: Metadata = {
     "web audio synth",
     "online instrument",
     "free synth",
+    "influanto",
+    "free music tools",
   ],
-  alternates: { canonical: "/" },
+  alternates: { canonical: "https://influanto.com/stemcell" },
   openGraph: {
     title,
     description,
     type: "website",
-    url: "/",
+    url: "https://influanto.com/stemcell",
     siteName: "stemcell",
     images: [
       {
@@ -51,11 +53,17 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   name: "stemcell",
+  url: "https://influanto.com/stemcell",
   applicationCategory: "MultimediaApplication",
   operatingSystem: "Any",
   browserRequirements: "Requires JavaScript and Web Audio API support",
   description,
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  publisher: {
+    "@type": "Organization",
+    name: "influanto",
+    url: "https://influanto.com",
+  },
 };
 
 export default function RootLayout({
