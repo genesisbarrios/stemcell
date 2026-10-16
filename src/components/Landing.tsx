@@ -55,7 +55,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="flex flex-1 items-center justify-center lg:hidden"
+            className="my-4 flex justify-center lg:hidden"
           >
             <HeroWaveform className="h-[22vh] w-[22vh]" />
           </motion.div>
