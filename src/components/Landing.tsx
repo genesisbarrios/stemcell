@@ -40,7 +40,9 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             <span className="lg:hidden">
               EVERY SOUND
               <br />
-              AN <span className="text-acid">INSTRUMENT</span>
+              IS AN
+              <br />
+              <span className="text-acid">INSTRUMENT</span>
             </span>
             <span className="hidden lg:inline">
               EVERY SOUND IS AN
