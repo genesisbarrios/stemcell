@@ -35,11 +35,18 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08 }}
-            className="font-display whitespace-nowrap text-[5vw] leading-[0.95] tracking-tight text-bone sm:text-[6vw] lg:max-w-[70%] lg:whitespace-normal lg:text-[4rem]"
+            className="font-display text-[8vw] leading-[0.95] tracking-tight text-bone sm:text-[7vw] lg:max-w-[70%] lg:text-[4rem]"
           >
-            EVERY SOUND IS AN{" "}
-            <br className="hidden lg:block" />
-            <span className="text-acid">INSTRUMENT</span>
+            <span className="lg:hidden">
+              EVERY SOUND
+              <br />
+              AN <span className="text-acid">INSTRUMENT</span>
+            </span>
+            <span className="hidden lg:inline">
+              EVERY SOUND IS AN
+              <br />
+              <span className="text-acid">INSTRUMENT</span>
+            </span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -55,7 +62,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="my-10 flex justify-center lg:hidden"
+            className="my-6 flex justify-center lg:hidden"
           >
             <HeroWaveform className="h-[30vh] w-[30vh]" />
           </motion.div>
