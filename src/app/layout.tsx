@@ -3,7 +3,7 @@ import "./globals.css";
 
 const title = "stemcell — free online granular synth";
 const description =
-  "stemcell is a free online granular synth on influanto. turn your voice into an instrument or turn any sound into an instrument — capture it, shred it into grains, and play it differently in your browser. no download, no account.";
+  "stemcell is a free online granular synth. turn your voice into an instrument or turn any sound into an instrument — capture it, shred it into grains, and play it differently in your browser. no download, no account.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://influanto.com"),
@@ -21,7 +21,6 @@ export const metadata: Metadata = {
     "web audio synth",
     "online instrument",
     "free synth",
-    "influanto",
     "free music tools",
   ],
   alternates: { canonical: "https://influanto.com/stemcell" },
@@ -33,9 +32,9 @@ export const metadata: Metadata = {
     siteName: "stemcell",
     images: [
       {
-        url: "/logo/logo-with-tagline_for-dark-bg_2x.png",
-        width: 1130,
-        height: 376,
+        url: "/stemcell%20synth.png",
+        width: 3024,
+        height: 1500,
         alt: "stemcell — free online granular synth",
       },
     ],
@@ -44,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description,
-    images: ["/logo/logo-with-tagline_for-dark-bg_2x.png"],
+    images: ["/stemcell%20synth.png"],
   },
   robots: { index: true, follow: true },
 };
@@ -59,11 +58,6 @@ const jsonLd = {
   browserRequirements: "Requires JavaScript and Web Audio API support",
   description,
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  publisher: {
-    "@type": "Organization",
-    name: "influanto",
-    url: "https://influanto.com",
-  },
 };
 
 export default function RootLayout({
