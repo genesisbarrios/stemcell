@@ -23,7 +23,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
           </div>
         </header>
 
-        <main className="relative flex flex-1 flex-col justify-center px-6 py-10 md:px-10 lg:px-16">
+        <main className="relative flex flex-1 flex-col px-6 py-10 md:px-10 lg:justify-center lg:px-16">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -55,7 +55,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="my-8 flex justify-center lg:hidden"
+            className="flex flex-1 items-center justify-center lg:hidden"
           >
             <HeroWaveform className="h-44 w-44 sm:h-56 sm:w-56" />
           </motion.div>
