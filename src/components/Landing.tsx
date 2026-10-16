@@ -55,7 +55,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="flex flex-1 items-center justify-center lg:hidden"
+            className="my-8 flex justify-center lg:hidden"
           >
             <HeroWaveform className="h-44 w-44 sm:h-56 sm:w-56" />
           </motion.div>
@@ -77,7 +77,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35 }}
-            className="mt-14"
+            className="mt-6 lg:mt-14"
           >
             <button
               onClick={onStart}
