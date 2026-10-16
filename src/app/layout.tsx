@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "STEMCELL — Every sound is an instrument",
+  title: "stemcell — every sound is an instrument",
   description:
-    "An experimental browser instrument. Capture a sound, break it into grains, and play it differently.",
+    "an experimental browser instrument. capture a sound, break it into grains, and play it differently.",
 };
 
 export default function RootLayout({

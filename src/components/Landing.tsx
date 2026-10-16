@@ -47,7 +47,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             transition={{ delay: 0.25 }}
             className="font-sub mt-6 max-w-md text-sm leading-relaxed tracking-wider text-dim"
           >
-            Capture it. Break it apart. Play it differently. STEMCELL shreds
+            Capture it. Break it apart. Play it differently. stemcell shreds
             audio into grains and rebuilds it under your fingers.
           </motion.p>
 

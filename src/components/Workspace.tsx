@@ -259,7 +259,7 @@ export default function Workspace({
       {/* main */}
       <main className="grid min-h-0 flex-1 grid-cols-1 gap-px overflow-y-auto bg-line lg:grid-cols-2 lg:overflow-visible">
         {/* left: waveform + granular */}
-        <section className="sc-panel flex min-h-0 flex-col">
+        <section className="sc-panel relative flex min-h-0 flex-col">
           <div className="flex h-9 items-center justify-between border-b border-line px-4">
             <span className="sc-label">
               source / drag to select region · click to set position
@@ -282,9 +282,22 @@ export default function Workspace({
               onPosition={(p) => onGranular("position", p)}
             />
 
-            {/* source chooser / panels — overlaid on the waveform */}
-            {(showChooser || showPanel) && (
-              <div className="absolute inset-0 flex flex-col bg-void/90">
+            <input
+              ref={fileRef}
+              type="file"
+              accept="audio/*"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) importFile(f);
+                e.target.value = "";
+              }}
+            />
+          </div>
+
+          {/* source chooser / panels — overlaid on the whole left column */}
+          {(showChooser || showPanel) && (
+            <div className="absolute inset-0 z-10 flex flex-col overflow-y-auto bg-void/95">
                 {showChooser && (
                   <div className="flex flex-1 flex-col items-center justify-center gap-4">
                     <div className="sc-label">load a source</div>
@@ -360,18 +373,6 @@ export default function Workspace({
                 )}
               </div>
             )}
-            <input
-              ref={fileRef}
-              type="file"
-              accept="audio/*"
-              className="hidden"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) importFile(f);
-                e.target.value = "";
-              }}
-            />
-          </div>
           <div className="flex h-9 items-center border-b border-line px-4">
             <span className="sc-label">granular engine</span>
           </div>
