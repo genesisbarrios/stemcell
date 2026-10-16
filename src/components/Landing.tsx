@@ -23,7 +23,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
           </div>
         </header>
 
-        <main className="relative flex flex-1 flex-col px-6 py-10 md:px-10 lg:justify-center lg:px-16">
+        <main className="relative flex flex-1 flex-col px-6 pt-5 pb-6 md:px-10 lg:justify-center lg:px-16 lg:py-10">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -35,7 +35,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08 }}
-            className="font-display text-[8vw] leading-[0.95] tracking-tight text-bone sm:text-[6.5vw] lg:max-w-[70%] lg:text-[4rem]"
+            className="font-display text-[6.5vw] leading-[0.95] tracking-tight text-bone sm:text-[6vw] lg:max-w-[70%] lg:text-[4rem]"
           >
             EVERY SOUND IS AN
             <br />
@@ -55,9 +55,9 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="my-8 flex justify-center lg:hidden"
+            className="flex flex-1 items-center justify-center lg:hidden"
           >
-            <HeroWaveform className="h-44 w-44 sm:h-56 sm:w-56" />
+            <HeroWaveform className="h-[28vh] w-[28vh]" />
           </motion.div>
 
           <div className="pointer-events-none absolute right-[5%] top-1/2 hidden -translate-y-1/2 lg:block">
