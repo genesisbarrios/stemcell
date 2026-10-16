@@ -86,7 +86,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
           <div className="font-sub text-[9px] tracking-[0.2em] text-dim">
             developed by{" "}
             <a
-              href="https://enigmasoftwareconsulting.com"
+              href="https://enigma-labs.com"
               target="_blank"
               rel="noreferrer"
               className="text-bone transition-colors hover:text-acid"
@@ -120,7 +120,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
               </svg>
             </a>
             <a
-              href="https://enigmasoftwareconsulting.com"
+              href="https://enigma-labs.com"
               target="_blank"
               rel="noreferrer"
               aria-label="Website"
@@ -133,7 +133,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
               </svg>
             </a>
             <a
-              href="mailto:hello@enigmasoftwareconsulting.com"
+              href="mailto:hello@enigma-labs.com"
               aria-label="Email"
               className="transition-colors hover:text-acid"
             >
