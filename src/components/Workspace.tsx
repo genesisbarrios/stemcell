@@ -272,9 +272,22 @@ export default function Workspace({
             <span className="sc-label">
               source / drag to select region · click to set position
             </span>
-            <span className="sc-readout">
-              {lastNote !== null ? `note ${lastNote}` : ""}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="sc-readout">
+                {lastNote !== null ? `note ${lastNote}` : ""}
+              </span>
+              {buffer && (
+                <button
+                  className="sc-btn px-2 py-0.5"
+                  onClick={() => {
+                    stopAll();
+                    setPanel("choose");
+                  }}
+                >
+                  + new sound
+                </button>
+              )}
+            </div>
           </div>
           <div className="relative h-36 border-b border-line sm:h-44">
             <WaveformEditor
