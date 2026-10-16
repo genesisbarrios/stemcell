@@ -307,37 +307,35 @@ export function LibraryPanel({
         </div>
         <div className="mt-1 text-[10px] text-dim">{sound.description}</div>
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-end gap-2">
+        <button
+          className="sc-btn"
+          disabled={busy}
+          onClick={async () => engine.preview(await getBuf())}
+        >
+          ▶ preview
+        </button>
         <button className="sc-btn" onClick={pick}>
           ⟳ another
         </button>
-        <div className="flex gap-2">
-          <button
-            className="sc-btn"
-            disabled={busy}
-            onClick={async () => engine.preview(await getBuf())}
-          >
-            ▶ preview
-          </button>
-          <button
-            className="sc-btn sc-btn-acid"
-            disabled={busy}
-            onClick={async () => {
-              const b = await getBuf();
-              onReady(
-                engine.setSource(b, {
-                  kind: "library",
-                  name: sound.name,
-                  duration: b.duration,
-                  channels: 2,
-                  attribution: "procedurally generated — STEMCELL library",
-                })
-              );
-            }}
-          >
-            {busy ? "…" : "load →"}
-          </button>
-        </div>
+        <button
+          className="sc-btn sc-btn-acid"
+          disabled={busy}
+          onClick={async () => {
+            const b = await getBuf();
+            onReady(
+              engine.setSource(b, {
+                kind: "library",
+                name: sound.name,
+                duration: b.duration,
+                channels: 2,
+                attribution: "procedurally generated — STEMCELL library",
+              })
+            );
+          }}
+        >
+          {busy ? "…" : "load →"}
+        </button>
       </div>
     </div>
   );
