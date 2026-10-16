@@ -35,7 +35,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08 }}
-            className="font-display text-[8vw] leading-[0.95] tracking-tight text-bone sm:text-[6.5vw] lg:text-[4.5rem]"
+            className="font-display text-[8vw] leading-[0.95] tracking-tight text-bone sm:text-[6.5vw] lg:max-w-[70%] lg:text-[4rem]"
           >
             EVERY SOUND IS AN
             <br />
@@ -58,9 +58,9 @@ export default function Landing({ onStart }: { onStart: () => void }) {
               opacity: { delay: 0.5, duration: 0.6 },
               y: { repeat: Infinity, duration: 5, ease: "easeInOut" },
             }}
-            className="pointer-events-none absolute right-[6%] top-[10%] hidden lg:block"
+            className="pointer-events-none absolute bottom-[8%] right-[5%] hidden lg:block"
           >
-            <HeroWaveform className="h-56 w-56 xl:h-72 xl:w-72" />
+            <HeroWaveform className="h-48 w-48 xl:h-64 xl:w-64" />
           </motion.div>
 
           <motion.div
