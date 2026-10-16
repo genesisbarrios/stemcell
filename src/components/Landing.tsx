@@ -23,7 +23,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
           </div>
         </header>
 
-        <main className="relative flex flex-1 flex-col px-6 pt-5 pb-6 md:px-10 lg:justify-center lg:px-16 lg:py-10">
+        <main className="relative flex flex-1 flex-col px-6 pt-2.5 pb-5 md:px-10 lg:justify-center lg:px-16 lg:py-10">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -45,7 +45,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.25 }}
-            className="font-sub mt-6 max-w-md text-sm leading-relaxed tracking-wider text-dim"
+            className="font-sub mt-3 max-w-md text-[11px] leading-relaxed tracking-wider text-dim lg:mt-6 lg:text-sm"
           >
             Capture it. Break it apart. Play it differently. stemcell shreds
             audio into grains and rebuilds it under your fingers.
@@ -57,7 +57,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             transition={{ delay: 0.4 }}
             className="flex flex-1 items-center justify-center lg:hidden"
           >
-            <HeroWaveform className="h-[28vh] w-[28vh]" />
+            <HeroWaveform className="h-[22vh] w-[22vh]" />
           </motion.div>
 
           <div className="pointer-events-none absolute right-[5%] top-1/2 hidden -translate-y-1/2 lg:block">
@@ -77,7 +77,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35 }}
-            className="mt-6 lg:mt-14"
+            className="mt-4 lg:mt-14"
           >
             <button
               onClick={onStart}
@@ -85,7 +85,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
             >
               START CREATING →
             </button>
-            <div className="font-sub mt-4 text-[9px] tracking-[0.2em] text-dim">
+            <div className="font-sub mt-2 text-[9px] tracking-[0.2em] text-dim lg:mt-4">
               no account · no upload · everything stays in your browser
             </div>
           </motion.div>
