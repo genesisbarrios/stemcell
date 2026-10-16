@@ -86,7 +86,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
           <div className="font-sub text-[9px] tracking-[0.2em] text-dim">
             developed by{" "}
             <a
-              href="https://enigma-labs.com"
+              href="https://www.enigma-labs.com/tools"
               target="_blank"
               rel="noreferrer"
               className="text-bone transition-colors hover:text-acid"
