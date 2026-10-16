@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
-// Decorative animated waveform — echoes the STEMCELL mark (waveform in a ring).
+// Decorative animated "organism" — mirrors the synth's Visualizer
+// (membrane ring + radial spectrum nucleus) but self-driven, no audio.
 export default function HeroWaveform({ className = "" }: { className?: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
@@ -17,6 +18,7 @@ export default function HeroWaveform({ className = "" }: { className?: string })
     let w = 0;
     let h = 0;
     let t = Math.random() * 100;
+    const ACID = "63,216,240";
 
     const resize = () => {
       const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -30,55 +32,63 @@ export default function HeroWaveform({ className = "" }: { className?: string })
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    // organic wave: layered inharmonic sines
-    const wave = (u: number, ph: number) =>
-      Math.sin(u * 6.5 + ph) * 0.55 +
-      Math.sin(u * 11.3 - ph * 1.4) * 0.3 +
-      Math.sin(u * 23.7 + ph * 0.6) * 0.15;
-
     const draw = () => {
       raf = requestAnimationFrame(draw);
-      t += reduced ? 0.004 : 0.022;
+      t += reduced ? 0.002 : 0.012;
       ctx.clearRect(0, 0, w, h);
       const cx = w / 2;
       const cy = h / 2;
-      const R = Math.min(w, h);
+      const base = Math.min(w, h) * 0.28;
+      const amp = 0.6 + 0.4 * Math.sin(t * 0.9); // slow energy swell
 
-      // faint ring — echoes the mark
-      ctx.strokeStyle = "rgba(240,237,227,0.22)";
-      ctx.lineWidth = 1;
+      // membrane: organic wave deforms the ring
       ctx.beginPath();
-      ctx.arc(cx, cy, R * 0.4, 0, Math.PI * 2);
+      const N = 128;
+      for (let i = 0; i <= N; i++) {
+        const a = (i / N) * Math.PI * 2;
+        const dev =
+          Math.sin(a * 3 + t * 2) * 0.12 +
+          Math.sin(a * 5 - t * 1.3) * 0.07 +
+          Math.sin(a * 8 + t * 2.7) * 0.05;
+        const breathe = Math.sin(t * 2 + a * 4) * 1.5;
+        const r = base + dev * base * amp * 2 + breathe;
+        const x = cx + Math.cos(a) * r;
+        const y = cy + Math.sin(a) * r;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = `rgba(${ACID},0.9)`;
+      ctx.lineWidth = 1.2;
       ctx.stroke();
+      ctx.fillStyle = `rgba(${ACID},${0.04 + amp * 0.05})`;
+      ctx.fill();
 
-      const span = R * 0.6;
-      const amp = R * 0.15 * (0.75 + 0.25 * Math.sin(t * 0.7));
-      const N = 140;
-      const trace = (ph: number, jitter: number) => {
+      // spectrum nucleus — radial bars
+      const bars = 48;
+      for (let i = 0; i < bars; i++) {
+        const v =
+          ((Math.sin(i * 1.3 + t * 4) + 1) / 2) *
+          (0.35 + 0.65 * ((Math.sin(i * 2.7 - t * 1.7) + 1) / 2)) *
+          amp;
+        const a = (i / bars) * Math.PI * 2 - Math.PI / 2;
+        const r0 = base * 0.18;
+        const r1 = r0 + v * base * 0.55;
+        ctx.strokeStyle = `rgba(${ACID},${0.2 + v * 0.8})`;
+        ctx.lineWidth = 1.5;
         ctx.beginPath();
-        for (let i = 0; i <= N; i++) {
-          const u = i / N;
-          const x = cx - span + u * span * 2;
-          const env = Math.sin(u * Math.PI);
-          const y =
-            cy + wave(u * Math.PI * 2, ph) * amp * env +
-            (Math.random() - 0.5) * jitter;
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
+        ctx.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0);
+        ctx.lineTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
         ctx.stroke();
-      };
+      }
 
-      ctx.strokeStyle = "rgba(176,231,235,0.35)";
-      ctx.lineWidth = 1;
-      trace(t - 0.9, reduced ? 0 : 0.8);
-
-      ctx.strokeStyle = "#3fd8f0";
-      ctx.lineWidth = 2;
-      ctx.shadowColor = "rgba(63,216,240,0.55)";
-      ctx.shadowBlur = 12;
-      trace(t, reduced ? 0 : 1.6);
-      ctx.shadowBlur = 0;
+      // nucleus dot
+      const spec = (Math.sin(t * 2.2) + 1) / 2;
+      const nr = base * (0.1 + spec * 0.3 * amp);
+      ctx.fillStyle = `rgba(${ACID},${0.5 + spec * 0.5})`;
+      ctx.beginPath();
+      ctx.arc(cx, cy, Math.max(2.5, nr * 0.35), 0, Math.PI * 2);
+      ctx.fill();
     };
     draw();
     return () => {
