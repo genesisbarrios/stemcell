@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     siteName: "stemcell",
     images: [
       {
-        url: "/stemcell%20synth.png",
+        url: "/stemcell-synth.png",
         width: 3024,
         height: 1500,
         alt: "stemcell — free online granular synth",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title,
     description,
-    images: ["/stemcell%20synth.png"],
+    images: ["/stemcell-synth.png"],
   },
   robots: { index: true, follow: true },
 };
